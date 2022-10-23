@@ -1,2 +1,2 @@
 # Highlights
-Project for automatic creation of NBA games/players highlights and upload to Youtube
+Auto creation and upload to YouTube videos of NBA games/players highlights
