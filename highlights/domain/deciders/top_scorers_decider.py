@@ -7,7 +7,9 @@ from highlights.domain.common import Game, Player, Stats
 
 
 class TopScorersDecider:
-    """Chooses top scorers from game day"""
+    """Chooses top scorers from game day.
+    Intended to be run in a script once a day when all games are finished.
+    """
 
     TOP = 6
 
@@ -21,7 +23,7 @@ class TopScorersDecider:
                 game_id=game_info['gameId'],
                 home_team=self._extract_team_name(game_info['homeTeam']),
                 away_team=self._extract_team_name(game_info['awayTeam']),
-                date=game_info['gameEt']
+                date=game_info['gameEt']  # todo refactor field
             )
 
             for leader_info in game_info['gameLeaders'].values():

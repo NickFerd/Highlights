@@ -1,4 +1,4 @@
-"""Fixtures for tests
+""" Common fixtures for tests
 """
 
 import pytest
