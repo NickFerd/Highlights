@@ -31,6 +31,18 @@ class Player:
     """Encapsulates info about a player in particular game
     """
     player_id: int
+    team_id: int
     name: str
     game: Game
     stats: Stats
+
+    @property
+    def game_id(self):
+        return self.game.game_id
+
+
+@dataclass
+class Link:
+    highlight_id: int
+    url: str
+    description: str = ''

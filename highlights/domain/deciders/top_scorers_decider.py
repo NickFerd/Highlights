@@ -1,9 +1,13 @@
-"""Decider class, implements logic of choosing players to make videos about
-Main logic - chooses top 6 scorers out of every game leaders"""
+"""Decider class, implements logic of choosing players to make videos about.
+Main logic - return top performers from every game of the day,
+sorted by points descending"""
+
+from typing import List
 
 from nba_api.live.nba.endpoints import scoreboard as live_scoreboard
 
 from highlights.domain.common import Game, Player, Stats
+from nba_api.stats.static import teams as static_teams
 
 
 class TopScorersDecider:
@@ -11,11 +15,15 @@ class TopScorersDecider:
     Intended to be run in a script once a day when all games are finished.
     """
 
-    TOP = 6
+    def __init__(self, logger, decider_config):
+        # todo refactor (any need for config, what data structure is config?)
+        self.logger = logger
+        self.config = decider_config
 
-    def execute(self, logger):
+    def execute(self) -> List[Player]:
         """Execute business logic behind decider
         """
+        # todo add logging
         raw_data = self._get_raw_data()
         leader_players = []
         for game_info in raw_data:
@@ -31,7 +39,7 @@ class TopScorersDecider:
 
         # Sort by points scored
         leader_players.sort(key=lambda x: x.stats.points, reverse=True)
-        return leader_players[:self.TOP]
+        return leader_players
 
     @staticmethod
     def _get_raw_data():
@@ -47,8 +55,12 @@ class TopScorersDecider:
     @staticmethod
     def _extract_player(player_info: dict, game_instance: Game):
         """extract info about a player"""
+        team = static_teams.find_team_by_abbreviation(
+            player_info['teamTricode']
+        )
         return Player(
             player_id=player_info['personId'],
+            team_id=team['id'],
             name=player_info['name'],
             game=game_instance,
             stats=Stats(points=player_info['points'],

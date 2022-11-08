@@ -6,6 +6,8 @@ import pytest
 
 @pytest.fixture
 def live_scoreboard_games():
+    """Mock response from live scoreboard
+    """
     return [
         {'awayTeam': {'inBonus': '0',
                       'losses': 1,
@@ -276,3 +278,330 @@ def live_scoreboard_games():
          'seriesGameNumber': '',
          'seriesText': ''}
     ]
+
+
+@pytest.fixture
+def video_details_response():
+    """Mock response from VideoDetails NBA API endpoint
+    """
+    return {
+        'parameters': {
+            'AheadBehind': None,
+            'ClutchTime': None,
+            'ContextFilter': '',
+            'ContextMeasure': 'PTS',
+            'DateFrom': None,
+            'DateTo': None,
+            'EndPeriod': None,
+            'EndRange': None,
+            'GameID': '0022200016',
+            'GameSegment': None,
+            'LastNGames': 0,
+            'LeagueID': None,
+            'Location': None,
+            'Month': 0,
+            'OppPlayerID': None,
+            'OpponentTeamID': 0,
+            'Outcome': None,
+            'Period': 0,
+            'PlayerID': 202695,
+            'PointDiff': None,
+            'Position': None,
+            'RangeType': None,
+            'RookieYear': None,
+            'Season': '2022-23',
+            'SeasonSegment': None,
+            'SeasonType': 'Regular Season',
+            'StartPeriod': None,
+            'StartRange': None,
+            'TeamID': 1610612746,
+            'VsConference': None,
+            'VsDivision': None},
+        'resource': 'videodetails',
+        'resultSets': {
+            'Meta': {
+                'videoUrls': [
+                    {'dur': None,
+                     'lth': None,
+                     'ltp': None,
+                     'ltt': None,
+                     'ltw': None,
+                     'mth': None,
+                     'mtp': None,
+                     'mtt': None,
+                     'mtw': None,
+                     'sth': None,
+                     'stp': None,
+                     'stt': None,
+                     'stw': None,
+                     'uuid': '4549dfbf-fde2-4dcc-8065-afade5ada267'},
+                    {'dur': None,
+                     'lth': None,
+                     'ltp': None,
+                     'ltt': None,
+                     'ltw': None,
+                     'mth': None,
+                     'mtp': None,
+                     'mtt': None,
+                     'mtw': None,
+                     'sth': None,
+                     'stp': None,
+                     'stt': None,
+                     'stw': None,
+                     'uuid': '4549dfbf-fde2-4dcc-8065-afade5ada267'},
+                    {'dur': None,
+                     'lth': None,
+                     'ltp': None,
+                     'ltt': None,
+                     'ltw': None,
+                     'mth': None,
+                     'mtp': None,
+                     'mtt': None,
+                     'mtw': None,
+                     'sth': None,
+                     'stp': None,
+                     'stt': None,
+                     'stw': None,
+                     'uuid': '4549dfbf-fde2-4dcc-8065-afade5ada267'},
+                    {'dur': None,
+                     'lth': None,
+                     'ltp': None,
+                     'ltt': None,
+                     'ltw': None,
+                     'mth': None,
+                     'mtp': None,
+                     'mtt': None,
+                     'mtw': None,
+                     'sth': None,
+                     'stp': None,
+                     'stt': None,
+                     'stw': None,
+                     'uuid': '4549dfbf-fde2-4dcc-8065-afade5ada267'},
+                    {'dur': None,
+                     'lth': None,
+                     'ltp': None,
+                     'ltt': None,
+                     'ltw': None,
+                     'mth': None,
+                     'mtp': None,
+                     'mtt': None,
+                     'mtw': None,
+                     'sth': None,
+                     'stp': None,
+                     'stt': None,
+                     'stw': None,
+                     'uuid': '4549dfbf-fde2-4dcc-8065-afade5ada267'},
+                    {'dur': None,
+                     'lth': None,
+                     'ltp': None,
+                     'ltt': None,
+                     'ltw': None,
+                     'mth': None,
+                     'mtp': None,
+                     'mtt': None,
+                     'mtw': None,
+                     'sth': None,
+                     'stp': None,
+                     'stt': None,
+                     'stw': None,
+                     'uuid': '4549dfbf-fde2-4dcc-8065-afade5ada267'},
+                    {'dur': None,
+                     'lth': None,
+                     'ltp': None,
+                     'ltt': None,
+                     'ltw': None,
+                     'mth': None,
+                     'mtp': None,
+                     'mtt': None,
+                     'mtw': None,
+                     'sth': None,
+                     'stp': None,
+                     'stt': None,
+                     'stw': None,
+                     'uuid': '4549dfbf-fde2-4dcc-8065-afade5ada267'}]},
+            'playlist': [
+                {'d': '20',
+                 'dsc': "Leonard 16' Fadeaway Jumper (2 PTS)",
+                 'ei': 254,
+                 'gc': '2022-10-20/LACLAL',
+                 'gi': '0022200016',
+                 'ha': 'LAL',
+                 'hpa': 36,
+                 'hpb': 36,
+                 'm': '10',
+                 'p': 2,
+                 'pta': 0,
+                 'va': 'LAC',
+                 'vpa': 50,
+                 'vpb': 48,
+                 'y': 2022},
+                {'d': '20',
+                 'dsc': "Leonard 15' Fadeaway Jumper (4 PTS)",
+                 'ei': 259,
+                 'gc': '2022-10-20/LACLAL',
+                 'gi': '0022200016',
+                 'ha': 'LAL',
+                 'hpa': 36,
+                 'hpb': 36,
+                 'm': '10',
+                 'p': 2,
+                 'pta': 0,
+                 'va': 'LAC',
+                 'vpa': 52,
+                 'vpb': 50,
+                 'y': 2022},
+                {'d': '20',
+                 'dsc': 'Leonard Free Throw 2 of 2 (5 PTS)',
+                 'ei': 386,
+                 'gc': '2022-10-20/LACLAL',
+                 'gi': '0022200016',
+                 'ha': 'LAL',
+                 'hpa': 60,
+                 'hpb': 60,
+                 'm': '10',
+                 'p': 3,
+                 'pta': 0,
+                 'va': 'LAC',
+                 'vpa': 61,
+                 'vpb': 60,
+                 'y': 2022},
+                {'d': '20',
+                 'dsc': "Leonard 1' Reverse Layup (7 PTS) (Jackson 3 AST)",
+                 'ei': 410,
+                 'gc': '2022-10-20/LACLAL',
+                 'gi': '0022200016',
+                 'ha': 'LAL',
+                 'hpa': 65,
+                 'hpb': 65,
+                 'm': '10',
+                 'p': 3,
+                 'pta': 0,
+                 'va': 'LAC',
+                 'vpa': 65,
+                 'vpb': 63,
+                 'y': 2022},
+                {'d': '20',
+                 'dsc': "Leonard 27' 3PT Jump Shot (10 PTS) (Wall 2 AST)",
+                 'ei': 445,
+                 'gc': '2022-10-20/LACLAL',
+                 'gi': '0022200016',
+                 'ha': 'LAL',
+                 'hpa': 65,
+                 'hpb': 65,
+                 'm': '10',
+                 'p': 3,
+                 'pta': 0,
+                 'va': 'LAC',
+                 'vpa': 74,
+                 'vpb': 71,
+                 'y': 2022},
+                {'d': '20',
+                 'dsc': "Leonard 5' Turnaround Bank Hook Shot (12 PTS)",
+                 'ei': 643,
+                 'gc': '2022-10-20/LACLAL',
+                 'gi': '0022200016',
+                 'ha': 'LAL',
+                 'hpa': 93,
+                 'hpb': 93,
+                 'm': '10',
+                 'p': 4,
+                 'pta': 0,
+                 'va': 'LAC',
+                 'vpa': 97,
+                 'vpb': 95,
+                 'y': 2022},
+                {'d': '20',
+                 'dsc': "Leonard 21' Jump Shot (14 PTS) (George 4 AST)",
+                 'ei': 693,
+                 'gc': '2022-10-20/LACLAL',
+                 'gi': '0022200016',
+                 'ha': 'LAL',
+                 'hpa': 95,
+                 'hpb': 95,
+                 'm': '10',
+                 'p': 4,
+                 'pta': 0,
+                 'va': 'LAC',
+                 'vpa': 101,
+                 'vpb': 99,
+                 'y': 2022}]}}
+
+
+@pytest.fixture
+def video_events_assets_response():
+    """Mock response from VideoEventsAsset nba api endpoint
+    """
+    return {
+        'parameters': {
+            'GameEventID': 783,
+            'GameID': '0022200009'
+        },
+        'resource': 'videoevents',
+        'resultSets': {
+            'Meta': {
+                'videoUrls': [
+                    {'ldur': 11700,
+                     'lth':
+                         'https://videos.nba.com/nba/pbp/media/2022/10/19'
+                         '/0022200009/783/34ebc6be-9491-9a8c-d75d'
+                         '-ede24d605475_1280x720.jpg',
+                     'lurl':
+                         'https://videos.nba.com/nba/pbp/media/2022/10/19'
+                         '/0022200009/783/34ebc6be-9491-9a8c-d75d'
+                         '-ede24d605475_1280x720.mp4',
+                     'mdur': 11700,
+                     'mth':
+                         'https://videos.nba.com/nba/pbp/media/2022/10/19'
+                         '/0022200009/783/34ebc6be-9491-9a8c-d75d'
+                         '-ede24d605475_960x540.jpg',
+                     'murl':
+                         'https://videos.nba.com/nba/pbp/media/2022/10/19'
+                         '/0022200009/783/34ebc6be-9491-9a8c-d75d'
+                         '-ede24d605475_960x540.mp4',
+                     'scc':
+                         'https://videos.nba.com/nba/pbp/media/2022/10/19'
+                         '/0022200009/783/34ebc6be-9491-9a8c-d75d'
+                         '-ede24d605475.scc',
+                     'sdur': 11700,
+                     'srt':
+                         'https://videos.nba.com/nba/pbp/media/2022/10/19'
+                         '/0022200009/783/34ebc6be-9491-9a8c-d75d'
+                         '-ede24d605475.srt',
+                     'sth':
+                         'https://videos.nba.com/nba/pbp/media/2022/10/19'
+                         '/0022200009/783/34ebc6be-9491-9a8c-d75d'
+                         '-ede24d605475_320x180.jpg',
+                     'surl':
+                         'https://videos.nba.com/nba/pbp/media/2022/10/19'
+                         '/0022200009/783/34ebc6be-9491-9a8c-d75d'
+                         '-ede24d605475_320x180.mp4',
+                     'uuid':
+                         '34ebc6be-9491-9a8c-d75d-ede24d605475',
+                     'vtt':
+                         'https://videos.nba.com/nba/pbp/media/2022/10/19'
+                         '/0022200009/783/34ebc6be-9491-9a8c-d75d'
+                         '-ede24d605475.vtt'}
+                ]
+            },
+            'playlist': [
+                {'d': '19',
+                 'dsc': 'MISS Fournier 3PT Jump Shot',
+                 'ei': 783,
+                 'gc': '2022-10-19/NYKMEM',
+                 'gi': '0022200009',
+                 'ha': 'MEM',
+                 'hid': 1610612763,
+                 'hpa': 115,
+                 'hpb': 115,
+                 'm': '10',
+                 'p': 5,
+                 'pta': 0,
+                 'va': 'NYK',
+                 'vid': 1610612752,
+                 'vpa': 112,
+                 'vpb': 112,
+                 'y': 2022
+                 }
+            ]
+        }
+    }

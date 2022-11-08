@@ -10,5 +10,7 @@ def test_top_scorers_deciders(live_scoreboard_games, ref_top_scorers_decider):
     """
     with patch.object(TopScorersDecider, '_get_raw_data',
                       return_value=live_scoreboard_games):
-        res = TopScorersDecider().execute(logger=MagicMock)
+        decider = TopScorersDecider(logger=MagicMock(),
+                                    decider_config=MagicMock())
+        res = decider.execute()
         assert res == ref_top_scorers_decider
