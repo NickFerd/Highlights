@@ -1,7 +1,7 @@
 """Tests of VideoDetailsHighlighter
 """
 from dataclasses import dataclass
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 from highlights.domain.common import Player, Game, Stats
 from highlights.domain.highlighters.video_details_highlighter \
