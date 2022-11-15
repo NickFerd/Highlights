@@ -7,13 +7,9 @@ from unittest.mock import patch
 from uuid import UUID
 
 from loguru import logger
-import pytest
 
 from highlights.domain.mergers.basic_merger import BasicMerger
-
-only_manual = pytest.mark.skipif(True,
-                                 reason="This test is very time consuming, "
-                                        "so we run it manually when needed")
+from tests.conftest import only_manual
 
 
 @dataclass
@@ -36,9 +32,10 @@ def test_basic_merger(fake_uuid, tmp_path, links_input):
     video_path = merger.execute(links=links_input)
 
     # assert created file has this path
-    ref = tmp_path/Path("final")/Path("6ba7b810-9dad-11d1-80b4-00c04fd430c8_final.mp4")
+    ref = tmp_path / Path("final") / Path(
+        "6ba7b810-9dad-11d1-80b4-00c04fd430c8_final.mp4")
     assert video_path == str(ref)
 
     # assert there are still clips in assets folder
-    assets_folder = tmp_path/Path("6ba7b810-9dad-11d1-80b4-00c04fd430c8")
+    assets_folder = tmp_path / Path("6ba7b810-9dad-11d1-80b4-00c04fd430c8")
     assert len(list(assets_folder.iterdir())) == len(links_input)

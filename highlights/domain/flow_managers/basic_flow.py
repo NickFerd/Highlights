@@ -5,13 +5,14 @@
 class BasicFlow:
     """Manages overall program flow
 
-    Simple synchronous implementation"""
+    Simple synchronous implementation, no saving result of work into DB
+    Static usage of components (highlighter, merger, uploader)"""
 
-    def __init__(self, workflow_config, engine):
-        self.config = workflow_config
-        self.engine = engine
+    def __init__(self, logger, config):
+        self.logger = logger
+        self.config = config
 
-    def execute(self, **kwargs):
+    def run(self, **kwargs):
         """Main entry point into flow
         """
-
+        # initialization of components

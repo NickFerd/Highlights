@@ -6,6 +6,7 @@ from typing import List
 
 from nba_api.stats.endpoints.videodetails import VideoDetails
 from nba_api.stats.endpoints.videoeventsasset import VideoEventsAsset
+from pydantic import BaseModel
 
 from highlights.domain.common import Player, Link
 from highlights.exceptions import ImproperConfiguration, InvalidLink, Abort
@@ -15,7 +16,11 @@ class VideoDetailsHighlighter:
     """Highlighter for creating list of links for download
     using VideoDetails endpoint"""
 
-    def __init__(self, logger, highlighter_config):
+    class Config(BaseModel):
+        """config class"""
+        sleep_between_nba_api_seconds: int = 1
+
+    def __init__(self, logger, highlighter_config: Config = Config()):
         self.logger = logger
         self.config = highlighter_config
 
@@ -23,12 +28,14 @@ class VideoDetailsHighlighter:
         self.logger.info(f"Started {self.__class__.__name__} with input: "
                          f"{player}")
         if not isinstance(player, Player):
-            raise ImproperConfiguration(f"{self.__class__.__name__} "
-                                        f"was passed wrong input: "
-                                        f"{player.__class__.__name__}. "
-                                        f"This class is intended to work "
-                                        f"with input of "
-                                        f"type <{Player}>")
+            msg = f"{self.__class__.__name__} " \
+                  f"was passed wrong input: " \
+                  f"{player.__class__.__name__}. " \
+                  f"This class is intended to work " \
+                  f"with input of " \
+                  f"type <{Player}>"
+            self.logger.error(msg)
+            raise ImproperConfiguration(msg)
 
         links = []
         for play in self._get_raw_data(player_info=player):
@@ -36,7 +43,7 @@ class VideoDetailsHighlighter:
                                   highlight_description=play['dsc'],
                                   game_id=player.game_id)
             links.append(link)
-            time.sleep(self.config.SLEEP_BETWEEN_NBA_API_SECONDS)
+            time.sleep(self.config.sleep_between_nba_api_seconds)
 
         # sort links by highlight_id (just in case)
         links.sort(key=lambda x: x.highlight_id)
@@ -86,4 +93,3 @@ class VideoDetailsHighlighter:
                               f"Context:game_id={game_id}, "
                               f"highlight_id={highlight_id}")
             raise
-

@@ -15,15 +15,13 @@ class TopScorersDecider:
     Intended to be run in a script once a day when all games are finished.
     """
 
-    def __init__(self, logger, decider_config):
-        # todo refactor (any need for config, what data structure is config?)
+    def __init__(self, logger):
         self.logger = logger
-        self.config = decider_config
 
     def execute(self) -> List[Player]:
         """Execute business logic behind decider
         """
-        # todo add logging
+        self.logger.info("Start <TopScorersDecider>")
         raw_data = self._get_raw_data()
         leader_players = []
         for game_info in raw_data:

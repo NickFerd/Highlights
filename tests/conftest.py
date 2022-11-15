@@ -3,6 +3,10 @@
 
 import pytest
 
+only_manual = pytest.mark.skipif(True,
+                                 reason="This test is very time consuming, "
+                                        "so we run it manually when needed")
+
 
 @pytest.fixture
 def live_scoreboard_games():

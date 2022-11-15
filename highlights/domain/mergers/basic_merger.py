@@ -7,6 +7,8 @@ import uuid
 import urllib3
 import shutil
 
+from pydantic import BaseModel
+
 from highlights.domain.common import Link
 
 from moviepy.editor import VideoFileClip, concatenate_videoclips
@@ -16,6 +18,11 @@ from highlights.exceptions import Abort
 
 class BasicMerger:
     """Basic synchronous implementation of merger"""
+
+    class Config(BaseModel):
+        delete_assets: bool = True
+        root_assets_folder: str = ''
+        retry_on_error: int = 3
 
     def __init__(self, logger, merger_config):
         self.logger = logger
@@ -45,13 +52,13 @@ class BasicMerger:
         final_video = self._merge_video(files_to_merge=files_to_merge,
                                         name=f"{process_id}_final.mp4")
         self.logger.info(f"Successfully created video, name={final_video}")
-        if self.config.DELETE_ASSETS:
+        if self.config.delete_assets:
             self._cleanup(folder_name=files_path)
         return final_video
 
     def _get_files_path(self, folder_name) -> Path:
         """Create folder to store video assets and return path object"""
-        assets_path = Path(self.config.ROOT_ASSETS_FOLDER).joinpath(
+        assets_path = Path(self.config.root_assets_folder).joinpath(
             Path(f"{folder_name}")
         )
         if not assets_path.exists():
@@ -75,7 +82,7 @@ class BasicMerger:
         """
         http_manager = urllib3.PoolManager()
         tries_count = 0
-        while tries_count < self.config.RETRY_ON_ERROR:
+        while tries_count < self.config.retry_on_error:
             try:
                 response = http_manager.request("GET", url=url)
                 with open(filename, "wb") as file:

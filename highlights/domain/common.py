@@ -1,8 +1,8 @@
 """Common data structures and functions used throughout the project
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 
 @dataclass
@@ -46,3 +46,12 @@ class Link:
     highlight_id: int
     url: str
     description: str = ''
+
+
+@dataclass
+class VideoMetaInfo:
+    """meta info about created video (title, description, tags)
+    """
+    title: str
+    description: str
+    tags: List[str] = field(default_factory=list)
