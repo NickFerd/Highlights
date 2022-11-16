@@ -72,10 +72,15 @@ class BasicMerger:
         file_object = files_folder.joinpath(Path(file_name))
         return str(file_object.resolve())
 
-    @staticmethod
-    def _cleanup(folder_name: Path):
+    def _cleanup(self, folder_name: Path):
         """Delete folder with assets after finish"""
-        shutil.rmtree(path=folder_name)
+        for i in range(1, self.config.retry_on_error + 1):
+            try:
+                shutil.rmtree(path=folder_name)
+                break
+            except OSError as err:
+                self.logger.error(f"Error deleting assets: {err},"
+                                  f"Try number #{i}")
 
     def _download_asset(self, url: str, filename: str):
         """Download video asset

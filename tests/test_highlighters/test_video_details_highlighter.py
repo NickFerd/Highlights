@@ -14,6 +14,7 @@ from highlights.domain.highlighters.video_details_highlighter \
 )
 def test_video_details_highlighter(mock_nba_videoeventsasset,
                                    mock_nba_videodetails,
+                                   _player,
                                    video_details_response,
                                    video_events_assets_response,
                                    links_ref):
@@ -27,19 +28,10 @@ def test_video_details_highlighter(mock_nba_videoeventsasset,
     api_video_events_assets.get_dict.return_value = \
         video_events_assets_response
 
-    # we need to pass valid PLayer type object
-    # contents do not matter as we mock calls to api
-    player = Player(player_id=203081,
-                    team_id=1610612757,
-                    name='Damian Lillard',
-                    game=Game(game_id='0022200027',
-                              home_team='Portland Trail Blazers',
-                              away_team='Phoenix Suns',
-                              date='2022-10-21T22:00:00-04:00'),
-                    stats=Stats(points=35, assists=2, rebounds=3,
-                                other=None))
     logger = MagicMock()
     highlighter = VideoDetailsHighlighter(logger=logger)
 
-    res = highlighter.execute(player=player)
+    # we need to pass valid PLayer type object
+    # contents do not matter as we mock calls to api
+    res = highlighter.execute(player=_player)
     assert res == links_ref

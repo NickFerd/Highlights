@@ -29,5 +29,10 @@ def test_basic_flow_config():
             'cred_file': 'cred.pickle',
             'production': True,
             'scopes': ['https://www.googleapis.com/auth/youtube.upload']
-        }
+        },
+        'min_value_stats': 6,
+        "max_number_videos": 4,
+        'video_description': '#nba #nbahighlights\n'
+                             'Most impressive performances of the game day - '
+                             'NBAdviser Highlights'
     }

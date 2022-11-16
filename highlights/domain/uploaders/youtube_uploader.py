@@ -11,6 +11,7 @@ from googleapiclient import discovery, http
 from google.auth.transport.requests import Request
 from pydantic import BaseModel
 
+from highlights.domain.common import VideoMetaInfo
 from highlights.exceptions import NotAutomated
 
 
@@ -44,7 +45,7 @@ class Uploader:
         self.config = uploader_config
         self.request_body = copy(self.REQUEST_BODY)
 
-    def execute(self, video_path: Path, meta_info):
+    def execute(self, video_path: str, meta_info: VideoMetaInfo):
         """Perform upload
         """
         youtube_api = self._get_youtube_api()
@@ -76,28 +77,30 @@ class Uploader:
         Raises error if in production and we need to redirect to browser for
         login
         """
-        cred = None
-
         if Path(self.config.cred_file).exists():
             with open(self.config.cred_file, "rb") as file:
                 cred = pickle.load(file)
+        else:
+            return self._login_action()
 
-        if self.config.production and (not cred or not cred.valid):
-            self.logger.warning("Credentials not found or invalid. "
-                                "Provide valid credentials file.")
-            raise NotAutomated("Login required, abort auto upload")
+        if not cred.valid:
+            self.logger.warning("Credentials not found or invalid.")
+            return self._login_action()
 
-        # Access token expired
-        if cred and cred.expired and cred.refresh_token:
+        if cred.expired and cred.refresh_token:
+            # refresh token
             cred.refresh(Request())
-            # save new credentials
             with open(self.config.cred_file, "wb") as file:
                 pickle.dump(cred, file)
-            return cred
+        return cred
 
-        # Manual login via browser (not intended to be called in production)
+    def _login_action(self) -> Credentials:
+        """perform manual login action if possible
+
+        Raises NotAutomated if browser is unavailable
+        """
         if not self.config.production:
-            self.logger.warning("Start manual login action for Google")
+            self.logger.warning("Start Google manual login action")
             flow = InstalledAppFlow.from_client_secrets_file(
                 self.config.client_secrets_file, self.config.scopes
             )
@@ -105,3 +108,5 @@ class Uploader:
             with open(self.config.cred_file, "wb") as file:
                 pickle.dump(cred, file)
             return cred
+        else:
+            raise NotAutomated("Abort login action")

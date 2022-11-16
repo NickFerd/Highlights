@@ -39,10 +39,15 @@ class VideoDetailsHighlighter:
 
         links = []
         for play in self._get_raw_data(player_info=player):
-            link = self._get_link(highlight_id=play['ei'],
-                                  highlight_description=play['dsc'],
-                                  game_id=player.game_id)
-            links.append(link)
+            try:
+                link = self._get_link(highlight_id=play['ei'],
+                                      highlight_description=play['dsc'],
+                                      game_id=player.game_id)
+                links.append(link)
+            except InvalidLink as err:
+                self.logger.error(f'Skipping play due to error: {err},'
+                                  f'Highlight: {play}')
+
             time.sleep(self.config.sleep_between_nba_api_seconds)
 
         # sort links by highlight_id (just in case)
@@ -58,7 +63,9 @@ class VideoDetailsHighlighter:
                 team_id=player_info.team_id,
                 game_id_nullable=player_info.game_id
             ).get_dict()
-            return video_details_for_player['resultSets']['playlist']
+            plays = video_details_for_player['resultSets']['playlist']
+            self.logger.debug(plays)
+            return plays
         except Exception as err:  # todo narrow exceptions
             self.logger.critical(f"Error in VideoDetails highlighter:\n{err}")
             raise Abort(f"Failed to get video details, error:\n{err}")
@@ -73,13 +80,14 @@ class VideoDetailsHighlighter:
                 game_event_id=highlight_id
             ).get_dict()
             links = video_data['resultSets']['Meta']['videoUrls']
+            self.logger.debug(links)
             # we choose best video asset quality
             url = links[0]['lurl']
-            if not url.endswith('.mp4'):
+            if url is None or not url.endswith('.mp4'):
                 raise InvalidLink(f"Invalid url for download: {url}")
             return Link(highlight_id=highlight_id, url=url,
                         description=highlight_description)
-        except (InvalidLink, IndexError) as err:
+        except (InvalidLink, IndexError, AttributeError) as err:
             self.logger.error(f"Problem with body of "
                               f"VideoEventAsset endpoint:\n"
                               f"{err}\n,"

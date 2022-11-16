@@ -5,6 +5,7 @@ from loguru import logger
 from highlights.config import BasicFlowConfig
 from highlights.domain.deciders.top_scorers_decider import TopScorersDecider
 from highlights.domain.flow_managers.basic_flow import BasicFlow
+from highlights.exceptions import Abort
 
 
 @logger.catch
@@ -23,8 +24,13 @@ def create_highlights():
     # run decider component
     decider = TopScorersDecider(logger=logger)
     players = decider.execute()
-    for player in players:
-        flow.run(player=player)
+    for player in players[:config.max_number_videos]:
+        try:
+            flow.run(player=player)
+        except Abort:
+            logger.error(f"Failed flow with input: {player}")
+        except Exception as err:
+            logger.critical(f"Unexpected error happened: {err}")
 
 
 if __name__ == '__main__':

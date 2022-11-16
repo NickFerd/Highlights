@@ -1,7 +1,10 @@
 """ Common fixtures for tests
 """
+import datetime
 
 import pytest
+
+from highlights.domain.common import Player, Game, Team, Stats
 
 only_manual = pytest.mark.skipif(True,
                                  reason="This test is very time consuming, "
@@ -609,3 +612,19 @@ def video_events_assets_response():
             ]
         }
     }
+
+
+@pytest.fixture
+def _player():
+    """Player instance"""
+    return Player(player_id=203081, team_id=1610612757, name='Damian Lillard',
+                  game=Game(game_id='0022200021',
+                            home_team=Team(team_id=1610612757,
+                                           full_name='Portland Trail Blazers',
+                                           tricode='POR'),
+                            away_team=Team(team_id=1610612756,
+                                           full_name='Phoenix Suns',
+                                           tricode='PHX'),
+                            date=datetime.date(2022, 10, 21),
+                            status=2),
+                  stats=Stats(points=35, assists=2, rebounds=3, other=None))

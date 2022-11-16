@@ -3,10 +3,11 @@ Main logic - return top performers from every game of the day,
 sorted by points descending"""
 
 from typing import List
+from datetime import datetime, date
 
 from nba_api.live.nba.endpoints import scoreboard as live_scoreboard
 
-from highlights.domain.common import Game, Player, Stats
+from highlights.domain.common import Game, Player, Stats, Team
 from nba_api.stats.static import teams as static_teams
 
 
@@ -21,21 +22,22 @@ class TopScorersDecider:
     def execute(self) -> List[Player]:
         """Execute business logic behind decider
         """
-        self.logger.info("Start <TopScorersDecider>")
+        self.logger.info(f"Start {self.__class__.__name__}")
         raw_data = self._get_raw_data()
         leader_players = []
         for game_info in raw_data:
             game = Game(
                 game_id=game_info['gameId'],
-                home_team=self._extract_team_name(game_info['homeTeam']),
-                away_team=self._extract_team_name(game_info['awayTeam']),
-                date=game_info['gameEt']  # todo refactor field
+                home_team=self._extract_team(game_info['homeTeam']),
+                away_team=self._extract_team(game_info['awayTeam']),
+                date=self._extract_game_date(game_info['gameCode']),
+                status=game_info["gameStatus"]
             )
 
             for leader_info in game_info['gameLeaders'].values():
                 leader_players.append(self._extract_player(leader_info, game))
 
-        # Sort by points scored
+        # Sort by points scored, descending
         leader_players.sort(key=lambda x: x.stats.points, reverse=True)
         return leader_players
 
@@ -46,9 +48,19 @@ class TopScorersDecider:
         return live_scoreboard.ScoreBoard().games.get_dict()
 
     @staticmethod
-    def _extract_team_name(team_info: dict):
+    def _extract_team(team_info: dict):
         """extract team name from raw data"""
-        return f"{team_info['teamCity']} {team_info['teamName']}"
+        return Team(team_id=team_info["teamId"],
+                    full_name=f"{team_info['teamCity']} "
+                              f"{team_info['teamName']}",
+                    tricode=team_info["teamTricode"])
+
+    @staticmethod
+    def _extract_game_date(game_code: str):
+        """Convert to valid datetime date object
+        Game code is a string, example: '20221021/SASIND'"""
+        return date(year=int(game_code[:4]), month=int(game_code[4:6]),
+                    day=int(game_code[6:8]))
 
     @staticmethod
     def _extract_player(player_info: dict, game_instance: Game):
