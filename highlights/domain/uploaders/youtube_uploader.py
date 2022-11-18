@@ -83,12 +83,9 @@ class Uploader:
         else:
             return self._login_action()
 
-        if not cred.valid:
-            self.logger.warning("Credentials not found or invalid.")
-            return self._login_action()
-
         if cred.expired and cred.refresh_token:
             # refresh token
+            self.logger.info('Try to refresh an expired token')
             cred.refresh(Request())
             with open(self.config.cred_file, "wb") as file:
                 pickle.dump(cred, file)

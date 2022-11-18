@@ -40,7 +40,6 @@ class BasicFlow:
     def _create_meta_info(self, player: Player):
         """Create object with meta data of video
         """
-        title = self._create_title(player=player)
         return VideoMetaInfo(title=self._create_title(player=player),
                              description=self.config.video_description)
 
@@ -49,4 +48,4 @@ class BasicFlow:
         """
         return f"{player.name} Highlights (" \
                f"{player.get_stats(min_include=self.config.min_value_stats)}" \
-               f") | {player.game_date} |{player.teams_playing_tricodes}"
+               f") | {player.game_date} | {player.teams_playing_tricodes}"

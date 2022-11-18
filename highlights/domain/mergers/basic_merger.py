@@ -92,6 +92,9 @@ class BasicMerger:
                 response = http_manager.request("GET", url=url)
                 with open(filename, "wb") as file:
                     file.write(response.data)
+                self.logger.debug(
+                    f"Successfully downloaded asset with url={url}"
+                )
                 break
             except Exception as err:
                 self.logger.error(f"Error downloading this url: {url}\n"

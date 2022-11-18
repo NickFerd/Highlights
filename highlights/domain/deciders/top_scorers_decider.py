@@ -3,7 +3,7 @@ Main logic - return top performers from every game of the day,
 sorted by points descending"""
 
 from typing import List
-from datetime import datetime, date
+from datetime import date
 
 from nba_api.live.nba.endpoints import scoreboard as live_scoreboard
 
@@ -39,6 +39,7 @@ class TopScorersDecider:
 
         # Sort by points scored, descending
         leader_players.sort(key=lambda x: x.stats.points, reverse=True)
+        self.logger.debug(leader_players)
         return leader_players
 
     @staticmethod
