@@ -11,8 +11,7 @@ if __name__ == '__main__':
     scheduler = BlockingScheduler()
 
     # configure jobs
-    # scheduler.add_job(create_highlights, trigger="cron", hour="8")
     scheduler.add_job(create_highlights,
-                      trigger="cron", minute="*/3", hour="17", max_instances=1)
+                      trigger="cron", hour="8", minute="15", max_instances=1)
 
     scheduler.start()
