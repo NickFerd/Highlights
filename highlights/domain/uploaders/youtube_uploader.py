@@ -48,6 +48,7 @@ class Uploader:
     def execute(self, video_path: str, meta_info: VideoMetaInfo):
         """Perform upload
         """
+        self.logger.info(f"Started {self.__class__.__name__}")
         youtube_api = self._get_youtube_api()
         self.request_body['snippet']['title'] = meta_info.title
         self.request_body['snippet']['description'] = meta_info.description

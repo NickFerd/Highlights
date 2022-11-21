@@ -1,0 +1,12 @@
+version: "3.5"
+
+services:
+  highlights:
+    build: .
+    environment:
+      - UPLOADER__CRED_FILE=/usr/src/app/secrets/cred.pickle
+      - UPLOADER__PRODUCTION=True
+    volumes:
+      - /var/log/highlights/:/var/log/highlights
+      - ${SECRETS_FOLDER}:/usr/src/app/secrets
+    restart: unless-stopped

@@ -1,0 +1,5 @@
+# Ignore not needed for build folders
+tests
+venv
+docs
+.idea
