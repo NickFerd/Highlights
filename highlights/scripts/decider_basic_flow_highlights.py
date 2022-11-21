@@ -8,7 +8,6 @@ from highlights.domain.flow_managers.basic_flow import BasicFlow
 from highlights.exceptions import Abort
 
 
-@logger.catch
 def create_highlights():
     """Script for creating video highlights.
     Intended to be called by cron or manually

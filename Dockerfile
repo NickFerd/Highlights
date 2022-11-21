@@ -8,4 +8,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY ./ ./
 ENV PYTHONPATH "${PYTHONPATH}:/usr/src/app/"
-CMD ["python", "highlights/scripts/decider_basic_flow_highlights.py"]
+
+CMD ["python", "highlights/scripts/scheduler.py"]
