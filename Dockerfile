@@ -8,5 +8,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY ./ ./
 ENV PYTHONPATH "${PYTHONPATH}:/usr/src/app/"
+ENV TZ Europe/Moscow
 
 CMD ["python", "highlights/scripts/scheduler.py"]

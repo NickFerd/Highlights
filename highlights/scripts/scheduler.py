@@ -13,6 +13,6 @@ if __name__ == '__main__':
     # configure jobs
     # scheduler.add_job(create_highlights, trigger="cron", hour="8")
     scheduler.add_job(create_highlights,
-                      trigger="cron", minute="*/3", max_instances=1)
+                      trigger="cron", minute="*/3", hour="17", max_instances=1)
 
     scheduler.start()
