@@ -4,22 +4,17 @@ import datetime
 from loguru import logger
 from nba_api.stats.static import players
 
-from highlights.config import BasicFlowConfig
+from highlights.config import BasicFlowConfig, LogConfig
 from highlights.domain.common import Player, Game, Team, Stats
 from highlights.domain.flow_managers.basic_flow import BasicFlow
 from highlights.exceptions import Abort
 
 
-@logger.catch
-def create_highlights(player: Player):
+def create_highlights(_player: Player, _logger):
     """Script for creating video highlights for a certain player.
     Intended to be called manually
     """
     config = BasicFlowConfig()
-
-    logger.add(config.log.filename,
-               level=config.log.level,
-               rotation=config.log.rotation)
 
     flow = BasicFlow(config=config, logger=logger)
 
@@ -32,17 +27,35 @@ def create_highlights(player: Player):
 
 
 if __name__ == '__main__':
-    _player = players.find_players_by_full_name('klay thompson')
-    player = Player(player_id=_player[0]['id'],
-                    team_id=1610612744,
-                    name='Klay Thompson',
-                    game=Game(game_id='0022200245',
-                              home_team=Team(team_id=1610612745,
-                                             full_name='Houston Rockets',
-                                             tricode='HOU'),
-                              away_team=Team(team_id=1610612744,
-                                             full_name='Golden State Warriors',
-                                             tricode='GSW'),
-                              date=datetime.date(2022, 11, 20), status=3),
-                    stats=Stats(points=41, assists=3, rebounds=4, other=None))
-    create_highlights(player=player)
+    # _player = players.find_players_by_full_name('klay thompson')
+    player = Player(player_id=1628368,
+                    team_id=1610612758,
+                    name=
+                    "De'Aaron Fox",
+                    game=Game(game_id=
+                              '0022200257',
+                              home_team=Team(team_id=1610612763,
+                                             full_name=
+                                             'Memphis Grizzlies',
+                                             tricode=
+                                             'MEM'
+                                             ),
+                              away_team=Team(team_id=1610612758,
+                                             full_name=
+                                             'Sacramento Kings',
+                                             tricode=
+                                             'SAC'
+                                             ),
+                              date=datetime.date(2022,
+                                                 11,
+                                                 22),
+                              status=3),
+                    stats=Stats(points=32,
+                                assists=6,
+                                rebounds=8,
+                                other=None))
+    log_config = LogConfig()
+    logger.add(log_config.filename,
+               level=log_config.level,
+               rotation=log_config.rotation)
+    create_highlights(_player=player, _logger=logger)

@@ -25,7 +25,7 @@ class VideoDetailsHighlighter:
         self.config = highlighter_config
 
     def execute(self, player: Player) -> List[Link]:
-        self.logger.info(f"Started {self.__class__.__name__} with input: "
+        self.logger.info(f"Start {self.__class__.__name__} with input: "
                          f"{player}")
         if not isinstance(player, Player):
             msg = f"{self.__class__.__name__} " \
@@ -67,8 +67,8 @@ class VideoDetailsHighlighter:
             self.logger.debug(plays)
             return plays
         except Exception as err:  # todo narrow exceptions
-            self.logger.critical(f"Error in VideoDetails highlighter:\n{err}")
-            raise Abort(f"Failed to get video details, error:\n{err}")
+            self.logger.critical(f"Error in VideoDetails highlighter: {err}")
+            raise Abort(f"Failed to get video details, error: {err}")
 
     def _get_link(self, highlight_id: int, highlight_description: str,
                   game_id: str) -> Link:
@@ -89,15 +89,13 @@ class VideoDetailsHighlighter:
                         description=highlight_description)
         except (InvalidLink, IndexError, AttributeError) as err:
             self.logger.error(f"Problem with body of "
-                              f"VideoEventAsset endpoint:\n"
-                              f"{err}\n,"
+                              f"VideoEventAsset endpoint: {err}, "
                               f"Context:game_id={game_id}, "
                               f"highlight_id={highlight_id}")
             raise
         except Exception as err:  # todo try to narrow the exception
             self.logger.error(f"Problem with connection to "
-                              f"VideoEventAsset endpoint:\n"
-                              f"{err}\n,"
+                              f"VideoEventAsset endpoint: {err},"
                               f"Context:game_id={game_id}, "
                               f"highlight_id={highlight_id}")
             raise

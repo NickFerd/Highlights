@@ -21,6 +21,7 @@ class BasicFlow:
     def run(self, player, **kwargs):
         """Main entry point into flow
         """
+        self.logger.info(f"Start {self.__class__.__name__}")
         # initialization of components (static)
         highlighter = VideoDetailsHighlighter(
             logger=self.logger, highlighter_config=self.config.highlighter

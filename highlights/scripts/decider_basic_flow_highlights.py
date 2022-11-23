@@ -2,21 +2,17 @@
 
 from loguru import logger
 
-from highlights.config import BasicFlowConfig
+from highlights.config import BasicFlowConfig, LogConfig
 from highlights.domain.deciders.top_scorers_decider import TopScorersDecider
 from highlights.domain.flow_managers.basic_flow import BasicFlow
 from highlights.exceptions import Abort
 
 
-def create_highlights():
+def create_highlights(_logger):
     """Script for creating video highlights.
     Intended to be called by cron or manually
     """
     config = BasicFlowConfig()
-
-    logger.add(config.log.filename,
-               level=config.log.level,
-               rotation=config.log.rotation)
 
     flow = BasicFlow(config=config, logger=logger)
 
@@ -33,4 +29,8 @@ def create_highlights():
 
 
 if __name__ == '__main__':
-    create_highlights()
+    log_config = LogConfig()
+    logger.add(log_config.filename,
+               level=log_config.level,
+               rotation=log_config.rotation)
+    create_highlights(_logger=logger)

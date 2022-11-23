@@ -22,7 +22,6 @@ class LogConfig(BaseModel):
 
 class BasicFlowConfig(BaseSettings):
     """Configuration for BasicFlow workflow"""
-    log: LogConfig = LogConfig()
     highlighter: VideoDetailsHighlighter.Config = \
         VideoDetailsHighlighter.Config()
     merger: BasicMerger.Config = BasicMerger.Config()
