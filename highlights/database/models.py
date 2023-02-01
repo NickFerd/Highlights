@@ -1,3 +1,0 @@
-"""Database tables ORM abstractions
-"""
-
