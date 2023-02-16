@@ -1,11 +1,9 @@
 """Script to make video highlights for particular player"""
-import datetime
 
 from loguru import logger
-from nba_api.stats.static import players
 
 from highlights.config import BasicFlowConfig, LogConfig
-from highlights.domain.common import Player, Game, Team, Stats
+from highlights.domain.common import Player
 from highlights.domain.deciders.player_adapter import PlayerAdapter
 from highlights.domain.flow_managers.basic_flow import BasicFlow
 from highlights.exceptions import Abort
@@ -27,12 +25,20 @@ def create_highlights(_player: Player, _logger):
         logger.critical(f"Unexpected error happened: {err}")
 
 
-if __name__ == '__main__':
+def setup(player_name: str, game_id: str):
+    """Entry point
+    """
     log_config = LogConfig()
     logger.add(log_config.filename,
                level=log_config.level,
                rotation=log_config.rotation)
 
-    player = PlayerAdapter().make_player(game_id='0022200768',
-                                         full_name="Nikola Jokic")
+    player = PlayerAdapter().make_player(game_id=game_id,
+                                         full_name=player_name)
     create_highlights(_player=player, _logger=logger)
+
+
+if __name__ == '__main__':
+    _game_id = '1111111'
+    _player_name = 'Butler'
+    setup(player_name=_player_name, game_id=_game_id)

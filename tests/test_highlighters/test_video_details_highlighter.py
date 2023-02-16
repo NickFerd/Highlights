@@ -2,7 +2,6 @@
 """
 from unittest.mock import patch, MagicMock
 
-from highlights.domain.common import Player, Game, Stats
 from highlights.domain.highlighters.video_details_highlighter \
     import VideoDetailsHighlighter
 

@@ -12,7 +12,7 @@ class BasicFlow:
     """Manages overall program flow
 
     Simple synchronous implementation, no saving result of work into DB
-    Static usage of components (highlighter, merger, uploader)"""
+    !Static usage of pre-defined components (highlighter, merger, uploader)!"""
 
     def __init__(self, logger, config: BasicFlowConfig):
         self.logger = logger
