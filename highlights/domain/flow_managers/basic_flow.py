@@ -1,5 +1,7 @@
 """Basic Flow class
 """
+import os
+
 from highlights.config import BasicFlowConfig
 from highlights.domain.common import Player, VideoMetaInfo
 from highlights.domain.highlighters.video_details_highlighter import \
@@ -37,6 +39,8 @@ class BasicFlow:
         path_to_video = merger.execute(links=links)
         uploader.execute(video_path=path_to_video,
                          meta_info=self._create_meta_info(player=player))
+        # delete created video if no exception occurred
+        os.remove(path_to_video)
 
     def _create_meta_info(self, player: Player):
         """Create object with meta data of video

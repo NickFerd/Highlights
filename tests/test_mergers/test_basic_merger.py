@@ -34,7 +34,7 @@ def test_basic_merger(fake_uuid, tmp_path, links_input):
 
     # assert created file has this path
     ref = tmp_path / Path("final") / Path(
-        "6ba7b810-9dad-11d1-80b4-00c04fd430c8_final.mp4")
+        f"{str(fake_uuid)}_final.mp4")
     assert video_path == str(ref)
 
     # assert there are still clips in assets folder

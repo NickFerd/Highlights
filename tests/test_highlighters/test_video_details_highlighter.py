@@ -30,7 +30,7 @@ def test_video_details_highlighter(mock_nba_videoeventsasset,
     logger = MagicMock()
     highlighter = VideoDetailsHighlighter(logger=logger)
 
-    # we need to pass valid PLayer type object
+    # we need to pass valid PLayer type object,
     # contents do not matter as we mock calls to api
     res = highlighter.execute(player=_player)
     assert res == links_ref
