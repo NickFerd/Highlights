@@ -6,6 +6,7 @@ from typing import List
 
 from nba_api.stats.endpoints.videodetails import VideoDetails
 from nba_api.stats.endpoints.videoeventsasset import VideoEventsAsset
+from nba_api.stats.library.parameters import ContextMeasureDetailed, ClutchTime
 from pydantic import BaseModel
 
 from highlights.domain.common import Player, Link
@@ -38,7 +39,7 @@ class VideoDetailsHighlighter:
             raise ImproperConfiguration(msg)
 
         links = []
-        for play in self._get_raw_data(player_info=player):
+        for play in self._make_list_of_plays(player_info=player):
             try:
                 link = self._get_link(highlight_id=play['ei'],
                                       highlight_description=play['dsc'],
@@ -54,21 +55,96 @@ class VideoDetailsHighlighter:
         links.sort(key=lambda x: x.highlight_id)
         return links
 
-    def _get_raw_data(self, player_info: Player) -> List[dict]:
-        """get raw data from nba api provider - video_details endpoint
+    def _make_list_of_plays(self, player_info: Player) -> List[dict]:
+        """get list of clips info for the video
         """
+        common_kwargs = dict(game_id_nullable=player_info.game_id,
+                             player_id=player_info.player_id,
+                             team_id=player_info.team_id)
         try:
-            video_details_for_player = VideoDetails(
-                player_id=player_info.player_id,
-                team_id=player_info.team_id,
-                game_id_nullable=player_info.game_id
-            ).get_dict()
-            plays = video_details_for_player['resultSets']['playlist']
+            plays = []
+            # Contents:
+            # All game:
+            # points no free throws, steals, blocks, assists for the dunk
+            # Clutch (last 4 minutes)
+            # todo think how to add 4 quarter last minutes if was overtime
+            # all free_throws, missed shots, assists - no dunks, turnovers
+            # ------
+            # All game moments
+            all_points = self._extract_playlist(**common_kwargs)
+            all_points_no_free_throws = [play for play in all_points
+                                         if "Free" not in play["dsc"]]
+            time.sleep(.6)
+
+            steals = self._extract_playlist(
+                context_measure_detailed=ContextMeasureDetailed.stl,
+                **common_kwargs
+            )
+            time.sleep(.6)
+            blocks = self._extract_playlist(
+                context_measure_detailed=ContextMeasureDetailed.blk,
+                **common_kwargs
+            )
+            time.sleep(.6)
+            all_assists = self._extract_playlist(
+                context_measure_detailed=ContextMeasureDetailed.ast,
+                **common_kwargs
+            )
+            dunk_assists = [play for play in all_assists
+                            if "Dunk" in play["dsc"]]
+            time.sleep(.6)
+
+            # Clutch moments
+            clutch_free_throws = self._extract_playlist(
+                context_measure_detailed=ContextMeasureDetailed.fta,
+                clutch_time_nullable=ClutchTime.last_4_minutes,
+                **common_kwargs
+            )
+            time.sleep(.6)
+            clutch_assists = self._extract_playlist(
+                context_measure_detailed=ContextMeasureDetailed.ast,
+                clutch_time_nullable=ClutchTime.last_4_minutes,
+                **common_kwargs
+            )
+            clutch_assists_no_dunks = [play for play in clutch_assists
+                                       if "Dunk" not in play["dsc"]]
+            time.sleep(.6)
+
+            clutch_all_shots = self._extract_playlist(
+                context_measure_detailed=ContextMeasureDetailed.fga,
+                clutch_time_nullable=ClutchTime.last_4_minutes,
+                **common_kwargs
+            )
+            clutch_missed_shots = [play for play in clutch_all_shots
+                                   if "MISS" in play["dsc"]]
+            time.sleep(.6)
+
+            clutch_turnovers = self._extract_playlist(
+                context_measure_detailed=ContextMeasureDetailed.tov,
+                clutch_time_nullable=ClutchTime.last_4_minutes,
+                **common_kwargs
+            )
+            time.sleep(.6)
+
+            plays = all_points_no_free_throws + dunk_assists + \
+                    blocks + steals + \
+                    clutch_free_throws + \
+                    clutch_assists_no_dunks + \
+                    clutch_missed_shots + \
+                    clutch_turnovers
+
             self.logger.debug(plays)
-            return plays
-        except Exception as err:  # todo narrow exceptions
+            return sorted(plays, key=lambda play: play["ei"])
+        except Exception as err:
             self.logger.critical(f"Error in VideoDetails highlighter: {err}")
             raise Abort(f"Failed to get video details, error: {err}")
+
+    @staticmethod
+    def _extract_playlist(**kwargs):
+        """Make request to the VideoDetails endpoint and extract 'playlist'
+        part of the answer
+        """
+        return VideoDetails(**kwargs).get_dict()["resultSets"]["playlist"]
 
     def _get_link(self, highlight_id: int, highlight_description: str,
                   game_id: str) -> Link:

@@ -25,7 +25,7 @@ def create_highlights(_player: Player, _logger):
         logger.critical(f"Unexpected error happened: {err}")
 
 
-def setup(player_name: str, game_id: str):
+def setup(player_name: str, game_id: str, player_id: int):
     """Entry point
     """
     log_config = LogConfig()
@@ -34,11 +34,12 @@ def setup(player_name: str, game_id: str):
                rotation=log_config.rotation)
 
     player = PlayerAdapter().make_player(game_id=game_id,
-                                         full_name=player_name)
+                                         full_name=player_name,
+                                         player_id=player_id)
     create_highlights(_player=player, _logger=logger)
 
 
 if __name__ == '__main__':
     _game_id = '1111111'
     _player_name = 'Butler'
-    setup(player_name=_player_name, game_id=_game_id)
+    # setup(player_name=_player_name, game_id=_game_id)

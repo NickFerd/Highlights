@@ -44,7 +44,7 @@ def test_login_action_not_called_valid_cred():
     if valid cred file provided
     """
     config = Uploader.Config(production=True,
-                             cred_file="C:\\Users\\Nikita\\Projects\\Highlights\\tests\\test_uploaders\\cred.pickle")
+                             cred_file="/secrets/cred.pickle")
     uploader = Uploader(logger=logger, uploader_config=config)
     # mock login method
     uploader._login_action = MagicMock()
